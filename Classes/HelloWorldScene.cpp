@@ -1,5 +1,8 @@
 #include "HelloWorldScene.h"
+#include "DropDownList.cpp"
+#include <UISlider.h>
 
+using namespace cocos2d::ui;
 USING_NS_CC;
 
 Scene* HelloWorld::createScene()
@@ -29,17 +32,17 @@ bool HelloWorld::init()
     
     auto visibleSize = Director::getInstance()->getVisibleSize();
     auto origin = Director::getInstance()->getVisibleOrigin();
-
     
     auto layer = LayerColor::create(Color4B(255,
                                             255,
                                             255,
                                             255));
-//    layer->setContentSize(visibleSize);
-//    layer->setPosition(origin);
+    layer->setContentSize(visibleSize);
+    layer->setPosition(origin);
     
     this->addChild(layer,
                    0);
+    
     
     /////////////////////////////
     // 2. add a menu item with "X" image, which is clicked to quit the program
@@ -48,33 +51,37 @@ bool HelloWorld::init()
     // add a "close" icon to exit the progress. it's an autorelease object
     auto closeItem = MenuItemImage::create("CloseNormal.png",
                                            "CloseSelected.png",
-                                           CC_CALLBACK_1(HelloWorld::menuCloseCallback, this));
+                                           CC_CALLBACK_1(HelloWorld::menuCloseCallback,
+                                                         this));
     
-	closeItem->setPosition(Vec2(origin.x + visibleSize.width - closeItem->getContentSize().width/2 ,
-                                origin.y + closeItem->getContentSize().height/2));
+	closeItem->setPosition(Vec2(origin.x + visibleSize.width - closeItem->getContentSize().width / 2,
+                                origin.y + closeItem->getContentSize().height / 2));
 
     // create menu, it's an autorelease object
-    auto menu = Menu::create(closeItem, NULL);
+    auto menu = Menu::create(closeItem,
+                             NULL);
     menu->setPosition(Vec2::ZERO);
-    this->addChild(menu, 1);
+    this->addChild(menu,
+                   1);
 
-//    /////////////////////////////
-//    // 3. add your codes below...
-//
-//    // add a label shows "Hello World"
-//    // create and initialize a label
-//    
-//    auto label = LabelTTF::create("Hello World",
-//                                  "Arial",
-//                                  24);
-//    
-//    // position the label on the center of the screen
-//    label->setPosition(Vec2(origin.x + visibleSize.width/2,
-//                            origin.y + visibleSize.height - label->getContentSize().height));
-//
-//    // add the label as a child to this layer
-//    this->addChild(label,
-//                   1);
+    /////////////////////////////
+    // 3. add your codes below...
+
+    // add a label shows "Hello World"
+    // create and initialize a label
+    
+    auto label = LabelTTF::create("Hello World",
+                                  "Arial",
+                                  24);
+    
+    // position the label on the center of the screen
+    label->setPosition(Vec2(origin.x + visibleSize.width/2,
+                            origin.y + visibleSize.height - label->getContentSize().height));
+    
+
+    // add the label as a child to this layer
+    this->addChild(label,
+                   1);
 
     // add "HelloWorld" splash screen"
     auto fighterIos = Sprite::create("FighterIos.png");
