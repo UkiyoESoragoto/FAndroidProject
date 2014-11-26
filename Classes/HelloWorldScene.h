@@ -3,6 +3,8 @@
 
 #include "cocos2d.h"
 
+USING_NS_CC;
+
 class HelloWorld : public cocos2d::Layer
 {
 public:
@@ -13,18 +15,24 @@ public:
     virtual bool init();  
     
     // a selector callback
-    void menuCloseCallback(cocos2d::Ref* pSender);
+    void MenuCloseCallback(cocos2d::Ref* pSender);
     
     void addTarget();
 
-    void spriteMoveFinished(Node *sender);
+    void SpriteMoveFinished(Node *sender);
     
-    void gameLogic(float dt);
+    void GameLogic(float dt);
+    
+    virtual bool onTouchBegan(Touch *touch,
+                              Event *event);
+    
+    void onTouchEnded(Touch *touch,
+                      Event *event);
     // implement the "static create()" method manually
     CREATE_FUNC(HelloWorld);
     
 private:
-    cocos2d::EventListenerTouchOneByOne *listener_touch_;
+    EventListenerTouchOneByOne *listener_touch_;
 };//HelloWorld : public cocos2d::Layer
 
 #endif // __HELLOWORLD_SCENE_H__
