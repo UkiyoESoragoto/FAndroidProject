@@ -130,8 +130,8 @@
     <Content Include="SplashScreenImage.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AppComponent\CProjectComponent.vcxproj">
-      <Name>CProjectComponent</Name>
+    <ProjectReference Include="..\AppComponent\FAndroidComponent.vcxproj">
+      <Name>FAndroidComponent</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

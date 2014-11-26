@@ -22,6 +22,9 @@ public:
     void gameLogic(float dt);
     // implement the "static create()" method manually
     CREATE_FUNC(HelloWorld);
+    
+private:
+    cocos2d::EventListenerTouchOneByOne *listener_touch_;
 };//HelloWorld : public cocos2d::Layer
 
 #endif // __HELLOWORLD_SCENE_H__
