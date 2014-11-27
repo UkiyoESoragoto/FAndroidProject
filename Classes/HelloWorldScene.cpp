@@ -4,6 +4,24 @@
 using namespace cocos2d::ui;
 USING_NS_CC;
 
+HelloWorld::HelloWorld():
+targets_(NULL),
+bullets_(NULL)
+{}//HelloWorld::HelloWorld
+
+HelloWorld::~HelloWorld()
+{
+    if (0 < targets_.size())
+    {
+        targets_.shrink_to_fit();
+    }
+    
+    if (0 < bullets_.size())
+    {
+        bullets_.shrink_to_fit();
+    }
+}//HelloWorld::~HelloWorld
+
 Scene* HelloWorld::createScene()
 {
     // 'scene' is an autorelease object
@@ -17,8 +35,9 @@ Scene* HelloWorld::createScene()
 
     // return the scene
     return scene;
-}
+}//HelloWorld::createScene
 
+#pragma mark - Initialization
 // on "init" you need to initialize your instance
 bool HelloWorld::init()
 {
@@ -29,6 +48,7 @@ bool HelloWorld::init()
         return false;
     }
     
+#pragma mark -listener
     listener_touch_ = EventListenerTouchOneByOne::create();
     listener_touch_->onTouchBegan = CC_CALLBACK_2(HelloWorld::onTouchBegan,
                                                   this);
@@ -37,9 +57,11 @@ bool HelloWorld::init()
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener_touch_,
                                                              this);
     
+#pragma mark -prepare variate
     auto visible_size = Director::getInstance()->getVisibleSize();
     auto origin = Director::getInstance()->getVisibleOrigin();
     
+#pragma mark -add a layer to be background
     auto layer = LayerColor::create(Color4B(255,
                                             255,
                                             255,
@@ -50,6 +72,7 @@ bool HelloWorld::init()
     this->addChild(layer,
                    0);
     
+#pragma mark -add close button
     /////////////////////////////
     // 2. add a menu item with "X" image, which is clicked to quit the program
     //    you may modify it.
@@ -90,25 +113,29 @@ bool HelloWorld::init()
 //    this->addChild(label,
 //                   1);
 //
+
+#pragma mark -add player sprite
     // add "HelloWorld" splash screen"
-    auto fighter_ios = Sprite::create("FighterIos.png");
+    auto player1 = Sprite::create("FighterIos.png");
 
     // position the sprite on the center of the screen
-    fighter_ios->setPosition(Vec2(origin.x + fighter_ios->getContentSize().width / 2,
+    player1->setPosition(Vec2(origin.x + player1->getContentSize().width / 2,
                                  origin.y + visible_size.height / 2));
     
-    fighter_ios->setTag(233);
+    player1->setTag(233);
 
     // add the sprite as a child to this layer
-    this->addChild(fighter_ios,
+    this->addChild(player1,
                    0);
     
+#pragma mark -add GameLogic
     this->schedule(schedule_selector(HelloWorld::GameLogic),
                    1.0);
     
     return true;
 }// HelloWorld::init
 
+#pragma mark - Callbakc function
 
 void HelloWorld::MenuCloseCallback(Ref* pSender)
 {
@@ -124,20 +151,24 @@ void HelloWorld::MenuCloseCallback(Ref* pSender)
 #endif
 }// HelloWorld::MenuCloseCallback
 
+#pragma mark - Sprite Management
+
 void HelloWorld::addTarget()
 {
-    auto *fighter_android = Sprite::create("FighterAnd.png");
+    auto *target = Sprite::create("FighterAnd.png");
     auto window_size = Director::getInstance()->getVisibleSize();
     
-    auto min_y = fighter_android->getContentSize().height / 2;
-    auto max_y = window_size.height - fighter_android->getContentSize().height / 2;
+    auto min_y = target->getContentSize().height / 2;
+    auto max_y = window_size.height - target->getContentSize().height / 2;
     
     auto range_y = max_y - min_y;
     auto actual_y = (rand() % (int)range_y) + min_y;
     
-    fighter_android->setPosition(Vec2(window_size.width + (fighter_android->getContentSize().width / 2),
+    target->setPosition(Vec2(window_size.width + (target->getContentSize().width / 2),
                              actual_y));
-    this->addChild(fighter_android);
+    this->addChild(target);
+    target->setTag(1);
+    targets_.push_back(target);
     
     auto min_duration = (int)2.0;
     auto max_duration = (int)4.0;
@@ -146,14 +177,14 @@ void HelloWorld::addTarget()
     auto actural_duration = (rand() % range_duration) + min_duration;
     
     auto *action_move = MoveTo::create((float)actural_duration,
-                                       Vec2(0 - fighter_android->getContentSize().width / 2,
+                                       Vec2(0 - target->getContentSize().width / 2,
                                             actual_y));
     auto *action_move_done = CallFuncN::create(
         this,
         callfuncN_selector(HelloWorld::SpriteMoveFinished));
-    fighter_android->runAction(Sequence::create(action_move,
-                                       action_move_done,
-                                       NULL));
+    target->runAction(Sequence::create(action_move,
+                                                action_move_done,
+                                                NULL));
 }//HelloWorld::addTarget
 
 void HelloWorld::SpriteMoveFinished(Node *sender)
@@ -168,6 +199,8 @@ void HelloWorld::GameLogic(float dt)
     this->addTarget();
 }//HelloWorld::GameLogic
 
+#pragma mark - Touch
+
 bool HelloWorld::onTouchBegan(cocos2d::Touch *touch, cocos2d::Event *event)
 {
     return true;
@@ -181,30 +214,30 @@ void HelloWorld::onTouchEnded(cocos2d::Touch *touch, cocos2d::Event *event)
     auto visible_size = Director::getInstance()->getVisibleSize();
     auto player_sprite = this->getChildByTag(233);
     
-    auto fighter_win = Sprite::create("FighterWin.png");
-    fighter_win->setPosition(player_sprite->getPosition());
+    auto bullet = Sprite::create("FighterWin.png");
+    bullet->setPosition(player_sprite->getPosition());
     
-    auto off_x = location.x - fighter_win->getPosition().x;
-    auto off_y = location.y - fighter_win->getPosition().y;
+    auto off_x = location.x - bullet->getPosition().x;
+    auto off_y = location.y - bullet->getPosition().y;
     
     if (0 >= off_x) return;
     
-    this->addChild(fighter_win);
+    this->addChild(bullet);
     
-    auto real_x = visible_size.width + (fighter_win->getContentSize().width / 2);
+    auto real_x = visible_size.width + (bullet->getContentSize().width / 2);
     auto ratio = off_y / off_x;
-    auto real_y = real_x * ratio + fighter_win->getPosition().y;
+    auto real_y = real_x * ratio + bullet->getPosition().y;
     auto read_destination = Point(real_x,
                                   real_y);
     
-    auto off_real_x = real_x - fighter_win->getPosition().x;
-    auto off_real_y = real_y - fighter_win->getPosition().y;
+    auto off_real_x = real_x - bullet->getPosition().x;
+    auto off_real_y = real_y - bullet->getPosition().y;
     auto length = sqrtf(off_real_x * off_real_x + off_real_y * off_real_y);
     
     auto velocity = 480 / 1;
     auto real_move_duration = length / velocity;
     
-    fighter_win->runAction(
+    bullet->runAction(
         Sequence::create(
             MoveTo::create(real_move_duration,
                            read_destination),
