@@ -2,6 +2,7 @@
 #define __HELLOWORLD_SCENE_H__
 
 #include "cocos2d.h"
+#include <CCVector.h>
 
 USING_NS_CC;
 
@@ -38,8 +39,8 @@ private:
     EventListenerTouchOneByOne *listener_touch_;
     
 protected:
-    std::vector<Sprite *> targets_;
-    std::vector<Sprite *> bullets_;
+    Vector<Sprite *> targets_;
+    Vector<Sprite *> bullets_;
 };//HelloWorld : public cocos2d::Layer
 
 #endif // __HELLOWORLD_SCENE_H__

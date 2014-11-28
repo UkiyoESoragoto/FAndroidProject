@@ -2,6 +2,7 @@
 #include <UISlider.h>
 
 using namespace cocos2d::ui;
+
 USING_NS_CC;
 
 HelloWorld::HelloWorld():
@@ -13,12 +14,12 @@ HelloWorld::~HelloWorld()
 {
     if (0 < targets_.size())
     {
-        targets_.shrink_to_fit();
+        targets_.shrinkToFit();
     }
     
     if (0 < bullets_.size())
     {
-        bullets_.shrink_to_fit();
+        bullets_.shrinkToFit();
     }
 }//HelloWorld::~HelloWorld
 
@@ -168,7 +169,7 @@ void HelloWorld::addTarget()
                              actual_y));
     this->addChild(target);
     target->setTag(1);
-    targets_.push_back(target);
+    targets_.pushBack(target);
     
     auto min_duration = (int)2.0;
     auto max_duration = (int)4.0;
@@ -192,6 +193,11 @@ void HelloWorld::SpriteMoveFinished(Node *sender)
     auto *sprite = (Sprite *)sender;
     this->removeChild(sprite,
                       true);
+    if (1 == sprite->getTag())
+    {
+        targets_.eraseObject(sprite);
+    }
+    
 }//HelloWorld::spreiteMoveFinshed
 
 void HelloWorld::GameLogic(float dt)
@@ -223,6 +229,7 @@ void HelloWorld::onTouchEnded(cocos2d::Touch *touch, cocos2d::Event *event)
     if (0 >= off_x) return;
     
     this->addChild(bullet);
+    bullets_.pushBack(bullet);
     
     auto real_x = visible_size.width + (bullet->getContentSize().width / 2);
     auto ratio = off_y / off_x;
