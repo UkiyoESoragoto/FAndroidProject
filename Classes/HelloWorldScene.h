@@ -27,7 +27,7 @@ public:
     
     void GameLogic(float dt);
     
-    void Update(float dt);
+    void update(float dt);
     
     virtual bool onTouchBegan(Touch *touch,
                               Event *event);

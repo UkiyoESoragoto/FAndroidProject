@@ -132,6 +132,7 @@ bool HelloWorld::init()
 #pragma mark -add GameLogic
     this->schedule(schedule_selector(HelloWorld::GameLogic),
                    1.0);
+    this->schedule(schedule_selector(HelloWorld::update));
     
     return true;
 }// HelloWorld::init
@@ -209,10 +210,49 @@ void HelloWorld::GameLogic(float dt)
     this->addTarget();
 }//HelloWorld::GameLogic
 
-void HelloWorld::Update(float dt)
+void HelloWorld::update(float dt)
 {
     Vector<Sprite *> targets_to_delete;
     Vector<Sprite *> bullets_to_delete;
+    
+    for (auto bullet : bullets_)
+    {
+        auto bullet_rect = Rect(
+            bullet->getPosition().x - bullet->getContentSize().width / 2,
+            bullet->getPosition().y - bullet->getContentSize().height / 2,
+            bullet->getContentSize().width,
+            bullet->getContentSize().height);
+        for (auto target : targets_)
+        {
+            auto target_rect = Rect(
+                target->getPosition().x - target->getContentSize().width / 2,
+                target->getPosition().y - target->getContentSize().height / 2,
+                target->getContentSize().width,
+                target->getContentSize().height);
+            
+            if (bullet_rect.intersectsRect(target_rect))
+            {
+                targets_to_delete.pushBack(target);
+                bullets_to_delete.pushBack(bullet);
+                log("hit");
+            }
+        }
+    }
+    
+    for (auto target : targets_to_delete)
+    {
+        targets_.eraseObject(target);
+        this->removeChild(target);
+    }
+    
+    for (auto bullet : bullets_to_delete)
+    {
+        bullets_.eraseObject(bullet);
+        this->removeChild(bullet);
+    }
+    
+    targets_to_delete.shrinkToFit();
+    bullets_to_delete.shrinkToFit();
 }
 
 #pragma mark - Touch
