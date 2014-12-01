@@ -197,6 +197,10 @@ void HelloWorld::SpriteMoveFinished(Node *sender)
     {
         targets_.eraseObject(sprite);
     }
+    else if (2 == sprite->getTag())
+    {
+        bullets_.eraseObject(sprite);
+    }
     
 }//HelloWorld::spreiteMoveFinshed
 
@@ -205,14 +209,22 @@ void HelloWorld::GameLogic(float dt)
     this->addTarget();
 }//HelloWorld::GameLogic
 
+void HelloWorld::Update(float dt)
+{
+    Vector<Sprite *> targets_to_delete;
+    Vector<Sprite *> bullets_to_delete;
+}
+
 #pragma mark - Touch
 
-bool HelloWorld::onTouchBegan(cocos2d::Touch *touch, cocos2d::Event *event)
+bool HelloWorld::onTouchBegan(cocos2d::Touch *touch,
+                              cocos2d::Event *event)
 {
     return true;
 }
 
-void HelloWorld::onTouchEnded(cocos2d::Touch *touch, cocos2d::Event *event)
+void HelloWorld::onTouchEnded(cocos2d::Touch *touch,
+                              cocos2d::Event *event)
 {
     //获取点击位置
     auto location_in_view = touch->getLocationInView();
