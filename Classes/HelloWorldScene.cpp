@@ -1,5 +1,4 @@
 #include "HelloWorldScene.h"
-#include <UISlider.h>
 
 using namespace cocos2d::ui;
 

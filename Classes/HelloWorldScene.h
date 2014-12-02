@@ -2,7 +2,6 @@
 #define __HELLOWORLD_SCENE_H__
 
 #include "cocos2d.h"
-#include <CCVector.h>
 
 USING_NS_CC;
 
