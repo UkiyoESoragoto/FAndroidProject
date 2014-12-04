@@ -4,6 +4,8 @@ using namespace cocos2d::ui;
 
 USING_NS_CC;
 
+#pragma mark - Initialization
+
 HelloWorld::HelloWorld():
 targets_(NULL),
 bullets_(NULL)
@@ -37,7 +39,6 @@ Scene* HelloWorld::createScene()
     return scene;
 }//HelloWorld::createScene
 
-#pragma mark - Initialization
 // on "init" you need to initialize your instance
 bool HelloWorld::init()
 {

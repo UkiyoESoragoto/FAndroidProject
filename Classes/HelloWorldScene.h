@@ -7,6 +7,8 @@ USING_NS_CC;
 
 class HelloWorld : public cocos2d::Layer
 {
+#pragma mark - Initialization
+
 public:
     HelloWorld();
     ~HelloWorld();
@@ -17,17 +19,21 @@ public:
     // Here's a difference. Method 'init' in cocos2d-x returns bool, instead of returning 'id' in cocos2d-iphone
     virtual bool init();
     
+    
+#pragma mark - Callbakc function
+
     // a selector callback
     void MenuCloseCallback(cocos2d::Ref* pSender);
-    
-    void addTarget();
 
+#pragma mark - Sprite Management
+
+    void addTarget();
     void SpriteMoveFinished(Node *sender);
-    
     void GameLogic(float dt);
-    
     void update(float dt);
-    
+
+#pragma mark - Touch
+
     virtual bool onTouchBegan(Touch *touch,
                               Event *event);
     
